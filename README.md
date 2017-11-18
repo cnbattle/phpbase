@@ -1,1 +1,1 @@
-his is a PHP commonly used function collection package.
+This is a PHP commonly used function collection package.
