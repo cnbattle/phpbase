@@ -6,22 +6,9 @@
  * Time: 下午3:20
  */
 
-namespace PHPBase; 
+namespace PHPBase;
 
-class Func
-{
-    public static function info()
-    {
-        echo "This is a PHP commonly used function collection package.";
-    }
-
-    /**
-     * 生产唯一id方法
-     */
-    public static function uuid(){
-
-    }
-
+class UUID {
     public static function v3($namespace, $name) {
         if(!self::is_valid($namespace)) return false;
 
