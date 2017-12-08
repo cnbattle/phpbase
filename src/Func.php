@@ -10,24 +10,33 @@ namespace PHPBase;
 
 class Func
 {
-    public static function info()
-    {
-        echo "This is a PHP commonly used function collection package.";
+    public static function info():string {
+        return "This is a PHP commonly used function collection package.";
     }
 
+    /**
+     * 最好的随机数
+     * @param int $min
+     * @param int $max
+     * @return int
+     */
+    public static function rand(int $min,int $max):int {
+        return mt_rand($min,$max);
+    }
 
     /**
      * 参数检测
      * @param $arr key数组
      * @param $parameter 检测的数组
+     * @return bool
      */
-    public function parameterIsNull($arr,$parameter)
-    {
+    public static function parameterIsNull($arr,$parameter):bool {
         foreach ($arr as $key => $value){
             if (!array_key_exists($value,$parameter) && empty($parameter[$value])){
                 die('缺乏必要参数:'.$value);
             }
         }
+        return true;
     }
 
 
@@ -35,7 +44,7 @@ class Func
      * 唯一uuid方法
      * From:https://secure.php.net/manual/zh/function.uniqid.php
      */
-    public static function uuid(){
+    public static function uuid():string {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 
                 // 32 bits for "time_low"
