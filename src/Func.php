@@ -15,6 +15,22 @@ class Func
         echo "This is a PHP commonly used function collection package.";
     }
 
+
+    /**
+     * 参数检测
+     * @param $arr key数组
+     * @param $parameter 检测的数组
+     */
+    public function parameterIsNull($arr,$parameter)
+    {
+        foreach ($arr as $key => $value){
+            if (!array_key_exists($value,$parameter) && empty($parameter[$value])){
+                die('缺乏必要参数:'.$value);
+            }
+        }
+    }
+
+
     /**
      * 唯一uuid方法
      * From:https://secure.php.net/manual/zh/function.uniqid.php
