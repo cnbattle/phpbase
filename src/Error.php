@@ -8,7 +8,6 @@
 
 namespace PHPBase;
 
-
 class Error
 {
     public static function output($message)
