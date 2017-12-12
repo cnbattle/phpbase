@@ -7,9 +7,13 @@
  */
 use PHPBase\Func;
 
-$str = 'abc';
+$str = '2017-12-23-123';
 $key = 'www.cnbattle.com';
-$token = Func::encrypt($str, 'E', $key);
-echo '加密:'.Func::encrypt($str, 'E', $key);
-echo '解密：'.Func::encrypt($str, 'D', $key);
+
+$str = 'abcdef';
+$key = 'www.cnbattle.com';
+$authcode =  Func::encrypt($str,'ENCODE',$key,0); //加密
+echo $authcode;
+echo Func::encrypt($authcode,'DECODE',$key,0); //解密
+
 
