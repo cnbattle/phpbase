@@ -9,7 +9,6 @@ composer installer
 
 Demo:
 ````
-
 <?php
 /**
  * Created by PhpStorm.
@@ -33,7 +32,6 @@ Func::http_get($http_url,$timeout,$times);
 Func::http_post($http_url,$post,$cookie,$timeout,$times);
 Func::https_get($https_url,$cookie,$timeout);
 Func::https_post($https_url,$post,$cookie,$timeout);
-
 ````
 
 Optimization suggestions [issues](https://github.com/cnbattle/phpbase/issues),please
