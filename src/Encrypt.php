@@ -13,7 +13,7 @@ class Encrypt
 {
     /**
      * Discuz!加密解密方法
-     * @param $string: 明文 或 密文
+     * @param $string: 明文或密文
      * @param string $operation: DECODE表示解密,其它表示加密
      * @param string $key: 密匙
      * @param int $expiry: 密文有效期
