@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: cnbattle
  * Date: 17-12-13
- * Time: 上午9:12
+ * Time: 上午9:18
  */
 
 namespace PHPBase;
@@ -20,6 +20,10 @@ class Encrypt
      * @return bool|string
      */
     public static function authCode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+
+        $string = str_replace("-","/",$string);
+        $string = str_replace("_","+",$string);
+
         // 动态密匙长度，相同的明文会生成不同密文就是依靠动态密匙
         $ckey_length = 4;
         // 密匙
@@ -76,7 +80,11 @@ class Encrypt
         } else {
             // 把动态密匙保存在密文里，这也是为什么同样的明文，生产不同密文后能解密的原因
             // 因为加密后的密文可能是一些特殊字符，复制过程可能会丢失，所以用base64编码
-            return $keyc.str_replace('=', '', base64_encode($result));
+            $output_key = $keyc.str_replace('=', '', base64_encode($result));
+            $output_key = str_replace("/","-",$output_key);
+            $output_key = str_replace("+","_",$output_key);
+            return $output_key;
         }
     }
+
 }
