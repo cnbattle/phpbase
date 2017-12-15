@@ -25,14 +25,6 @@ class Func
      * @param $str 搜索的字符串
      * @param $startChar 开始字符串
      * @param $endChar 结束字符串
-     * @return array|string
-     */
-
-    /**
-     * 批量搜索字符串
-     * @param $str 搜索的字符串
-     * @param $startChar 开始字符串
-     * @param $endChar 结束字符串
      * @param bool $is_start 是否包含开始字符串,默认包含
      * @param bool $is_end 是否包含结束字符串,默认包含
      * @return array|string
