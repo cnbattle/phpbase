@@ -27,18 +27,33 @@ class Func
      * @param $endChar 结束字符串
      * @return array|string
      */
-    public static function strSearchAll($str, $startChar,$endChar){
+
+    /**
+     * 批量搜索字符串
+     * @param $str 搜索的字符串
+     * @param $startChar 开始字符串
+     * @param $endChar 结束字符串
+     * @param bool $is_start 是否包含开始字符串,默认包含
+     * @param bool $is_end 是否包含结束字符串,默认包含
+     * @return array|string
+     */
+    public static function strSearchAll($str, $startChar, $endChar, $is_start = true,$is_end = true){
         $startNum = 0;
         $endNum = 0;
         $arr = array();
         $startCount = substr_count($str, $startChar);// 获取开始字符串 出现的次数
         $endCount = substr_count($str, $endChar);// 获取结束字符串 出现的次数
-        $endCharNum = strlen($endChar);
-        if ($startCount == $endCount){
+        $startCharNum = strlen($startChar);
+        $endCharNum = 0;
+
+        if ($is_start) { $startCharNum = 0;}
+        if ($is_end) { $endCharNum = strlen($endChar);}
+
+        if ($startCount == $endCount) {
             for($i = 0; $i < $startCount; $i++){
                 $startNum = strpos($str, $startChar, $startNum);
                 $endNum = strpos($str, $endChar, $endNum);
-                $tmp = substr($str,$startNum,$endNum-$startNum+$endCharNum);
+                $tmp = substr($str,$startNum+$startCharNum,$endNum-$startNum+$endCharNum);
                 $arr[] = $tmp;
                 $startNum++;
                 $endNum++;
