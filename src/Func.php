@@ -16,7 +16,7 @@ class Func
      * @param int $max
      * @return int
      */
-    public static function rand(int $min,int $max):int {
+    public static function rand($min,$max) {
         return mt_rand($min,$max);
     }
 
@@ -54,7 +54,7 @@ class Func
      * @param $parameter 检测的数组
      * @return bool
      */
-    public static function parameterIsNull($arr,$parameter):bool {
+    public static function parameterIsNull($arr,$parameter) {
         foreach ($arr as $key => $value){
             if (!array_key_exists($value,$parameter) && empty($parameter[$value])){
                 die('缺乏必要参数:'.$value);
