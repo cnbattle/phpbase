@@ -69,13 +69,15 @@ class Http
      * @return mixed|string
      */
     public static function https_post($url, $post = '', $cookie = '', $timeout=30) {
-        $w = stream_get_wrappers();
-        $allow_url_fopen = strtolower(ini_get('allow_url_fopen'));
-        $allow_url_fopen = (empty($allow_url_fopen) || $allow_url_fopen == 'off') ? 0 : 1;
-        if(extension_loaded('openssl') && in_array('https', $w) && $allow_url_fopen) {
-            return file_get_contents($url);
-        } elseif (!function_exists('curl_init')) {
-            return 'server not installed curl';
+        if (empty($post)) {
+            $w = stream_get_wrappers();
+            $allow_url_fopen = strtolower(ini_get('allow_url_fopen'));
+            $allow_url_fopen = (empty($allow_url_fopen) || $allow_url_fopen == 'off') ? 0 : 1;
+            if(extension_loaded('openssl') && in_array('https', $w) && $allow_url_fopen) {
+                return file_get_contents($url);
+            } elseif (!function_exists('curl_init')) {
+                return 'server not installed curl';
+            }
         }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
