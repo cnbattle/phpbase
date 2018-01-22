@@ -21,9 +21,20 @@ class Error
      * @return array
      */
     public static function error($status = 200, $msg = '') {
-        return [
+        return json_encode([
             'status' => $status,
             'msg' => $msg
-        ];
+        ]);
+    }
+
+    /**
+     * @param int $status
+     * @param string $msg
+     */
+    public static function errorHandle($status = 200, $msg = '') {
+        die(json_encode([
+            'status' => $status,
+            'msg' => $msg
+        ]));
     }
 }
