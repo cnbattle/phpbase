@@ -8,7 +8,7 @@
 
 namespace PHPBase;
 
-class UUID {
+class Uuid {
     public static function v3($namespace, $name) {
         if(!self::is_valid($namespace)) return false;
 
