@@ -14,4 +14,16 @@ class Error
     {
         die($message);
     }
+
+    /**
+     * @param int $status
+     * @param string $msg
+     * @return array
+     */
+    public static function error($status = 200, $msg = '') {
+        return [
+            'status' => $status,
+            'msg' => $msg
+        ];
+    }
 }
