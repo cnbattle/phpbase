@@ -10,12 +10,23 @@ namespace PHPBase\Encrypt;
 
 class Aes
 {
-    private $key;
-    private $iv;
+    private $key; // php -r "echo (openssl_random_pseudo_bytes(32));"
+    private $iv; // php -r "echo (openssl_random_pseudo_bytes(16));"
+
 
     public function __construct($key, $iv) {
         $this->key = $key;
         $this->iv = $iv;
+    }
+
+    public function createKey() {
+        $this->key = base64_encode(openssl_random_pseudo_bytes(32));
+        return $this->key;
+    }
+
+    public function createIv() {
+        $this->iv = base64_encode(openssl_random_pseudo_bytes(16));
+        return $this->iv;
     }
 
     public function encrypt($data) {
