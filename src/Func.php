@@ -95,5 +95,30 @@ class Func
         return $ip;
     }
 
+    /**
+     * manyTimesAgo
+     * @param $time
+     * @param string $default_lang
+     * @return string
+     */
+    public function manyTimesAgo($time, $default_lang = 'zh_cn') {
+        $t = time() - $time;
+        $language['en'] = [' Year', ' Month', ' Week', ' Day', ' Hour', ' Minute', ' Second', ' Ago'];
+        $language['zh_cn'] = ['年', '个月', '星期', '天', '小时', '分钟', '秒', '前'];
+        $f = array(
+            '31536000' => $language[$default_lang][0],
+            '2592000' => $language[$default_lang][1],
+            '604800' => $language[$default_lang][2],
+            '86400' => $language[$default_lang][3],
+            '3600' => $language[$default_lang][4],
+            '60' => $language[$default_lang][5],
+            '1' => $language[$default_lang][6]
+        );
+        foreach ($f as $k => $v) {
+            if (0 != $c = floor($t / (int)$k)) {
+                return $c . $v . $language[$default_lang][7];
+            }
+        }
+    }
 
 }
