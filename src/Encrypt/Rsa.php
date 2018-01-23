@@ -31,14 +31,12 @@ class Rsa
         return $this;
     }
 
-    public function rsaEncrypt($data)
-    {
+    public function rsaEncrypt($data) {
         openssl_public_encrypt($data, $crypted, $this->publicKey);
         return $crypted;
     }
 
-    public function rsaDecrypt($data)
-    {
+    public function rsaDecrypt($data) {
         openssl_private_decrypt($data, $decrypted, $this->privateKey);
         return $decrypted;
     }

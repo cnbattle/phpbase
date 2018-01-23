@@ -12,20 +12,19 @@ class Aes
 {
     private $key;
     private $iv;
-    public function __construct($key, $iv)
-    {
+
+    public function __construct($key, $iv) {
         $this->key = $key;
         $this->iv = $iv;
-
     }
-    public function encrypt($data)
-    {
+
+    public function encrypt($data) {
         $encrypted = openssl_encrypt($data, 'aes-256-cbc', base64_decode($this->key), OPENSSL_RAW_DATA, base64_decode($this->iv));
         return base64_encode($encrypted);
 
     }
-    public function decrypt($data)
-    {
+
+    public function decrypt($data) {
         $decrypted = openssl_decrypt(base64_decode($data), 'aes-256-cbc', base64_decode($this->key), OPENSSL_RAW_DATA, base64_decode($this->iv));
         return $decrypted;
     }

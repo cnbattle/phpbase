@@ -6,7 +6,7 @@
  * Time: 下午3:20
  */
 
-namespace PHPBase; 
+namespace PHPBase;
 
 class Func
 {
@@ -16,8 +16,8 @@ class Func
      * @param int $max
      * @return int
      */
-    public static function rand($min,$max) {
-        return mt_rand($min,$max);
+    public static function rand($min, $max) {
+        return mt_rand($min, $max);
     }
 
     /**
@@ -29,7 +29,7 @@ class Func
      * @param bool $is_end 是否包含结束字符串,默认包含
      * @return array|string
      */
-    public static function strSearchAll($str, $startChar, $endChar, $is_start = true,$is_end = true){
+    public static function strSearchAll($str, $startChar, $endChar, $is_start = true, $is_end = true) {
         $startNum = 0;
         $endNum = 0;
         $arr = array();
@@ -38,14 +38,18 @@ class Func
         $startCharNum = strlen($startChar);
         $endCharNum = 0;
 
-        if ($is_start) { $startCharNum = 0;}
-        if ($is_end) { $endCharNum = strlen($endChar);}
+        if ($is_start) {
+            $startCharNum = 0;
+        }
+        if ($is_end) {
+            $endCharNum = strlen($endChar);
+        }
 
         if ($startCount == $endCount) {
-            for($i = 0; $i < $startCount; $i++){
+            for ($i = 0; $i < $startCount; $i++) {
                 $startNum = strpos($str, $startChar, $startNum);
                 $endNum = strpos($str, $endChar, $endNum);
-                $tmp = substr($str,$startNum+$startCharNum,$endNum-$startNum+$endCharNum);
+                $tmp = substr($str, $startNum + $startCharNum, $endNum - $startNum + $endCharNum);
                 $arr[] = $tmp;
                 $startNum++;
                 $endNum++;
@@ -54,20 +58,41 @@ class Func
         }
         return '数据不对称';
     }
-    
+
     /**
      * 参数检测
      * @param $arr key数组
      * @param $parameter 检测的数组
      * @return bool
      */
-    public static function parameterIsNull($arr,$parameter) {
-        foreach ($arr as $key => $value){
-            if (!array_key_exists($value,$parameter) && empty($parameter[$value])){
-                die('缺乏必要参数:'.$value);
+    public static function parameterIsNull($arr, $parameter) {
+        foreach ($arr as $key => $value) {
+            if (!array_key_exists($value, $parameter) && empty($parameter[$value])) {
+                die('缺乏必要参数:' . $value);
             }
         }
         return true;
+    }
+
+    /**
+     * 获取访问者ip
+     * @return array|false|string
+     */
+    public static function getClientIP() {
+        if (getenv('HTTP_CLIENT_IP')) {
+            $ip = getenv('HTTP_CLIENT_IP');
+        } elseif (getenv('HTTP_X_FORWARDED_FOR')) {
+            $ip = getenv('HTTP_X_FORWARDED_FOR');
+        } elseif (getenv('HTTP_X_FORWARDED')) {
+            $ip = getenv('HTTP_X_FORWARDED');
+        } elseif (getenv('HTTP_FORWARDED_FOR')) {
+            $ip = getenv('HTTP_FORWARDED_FOR');
+        } elseif (getenv('HTTP_FORWARDED')) {
+            $ip = getenv('HTTP_FORWARDED');
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
     }
 
 

@@ -10,8 +10,7 @@ namespace PHPBase;
 
 class Error
 {
-    public static function output($message)
-    {
+    public static function output($message) {
         die($message);
     }
 
