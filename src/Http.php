@@ -101,7 +101,7 @@ class Http
         curl_setopt($ch, CURLOPT_HEADER, 2); // 1/2
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/x-www-form-urlencoded', 'x-requested-with: XMLHttpRequest'));
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERAGENT, _SERVER('HTTP_USER_AGENT'));
+        curl_setopt($ch, CURLOPT_USERAGENT, GlobalVariables::SERVER('HTTP_USER_AGENT'));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2); // 从证书中检查SSL加密算法是否存在，默认可以省略
         if ($post) {
