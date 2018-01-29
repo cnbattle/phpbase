@@ -86,14 +86,7 @@ class Http
         }
         is_array($post) AND $post = http_build_query($post);
         is_array($cookie) AND $cookie = http_build_query($cookie);
-        $w = stream_get_wrappers();
-        $allow_url_fopen = strtolower(ini_get('allow_url_fopen'));
-        $allow_url_fopen = (empty($allow_url_fopen) || $allow_url_fopen == 'off') ? 0 : 1;
-        if (extension_loaded('openssl') && in_array('https', $w) && $allow_url_fopen) {
-            $stream = stream_context_create(array('http' => array('header' => "Content-type: application/x-www-form-urlencoded\r\nx-requested-with: XMLHttpRequest\r\nCookie: $cookie\r\n", 'method' => 'POST', 'content' => $post, 'timeout' => $timeout)));
-            $s = file_get_contents($url, NULL, $stream, 0, 4096000);
-            return $s;
-        } elseif (!function_exists('curl_init')) {
+       if (!function_exists('curl_init')) {
             return Error::error(-1, 'server not installed curl.');
         }
         $ch = curl_init();
