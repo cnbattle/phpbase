@@ -18,9 +18,9 @@ class Http
      * @param int $times
      * @return bool|string
      */
-    public static function httpGet($url, $cookie = '', $timeout = 30, $times = 3) {
+    public static function httpGet($url, $timeout = 30, $times = 3) {
         if (substr($url, 0, 8) == 'https://') {
-            return self::httpsGet($url, $cookie, $timeout, $times);
+            return self::httpsGet($url, $timeout, $times);
         }
         $arr = array(
             'http' => array(
@@ -44,13 +44,12 @@ class Http
      * @param int $times
      * @return bool|string
      */
-    public static function httpPost($url, $post = '', $cookie = '', $timeout = 30, $times = 3) {
+    public static function httpPost($url, $post = '',  $timeout = 30,$times = 3) {
         if (substr($url, 0, 8) == 'https://') {
-            return self::httpsPost($url, $post, $cookie, $timeout, $times);
+            return self::httpsPost($url, $post, $timeout);
         }
         is_array($post) AND $post = http_build_query($post);
-        is_array($cookie) AND $cookie = http_build_query($cookie);
-        $stream = stream_context_create(array('http' => array('header' => "Content-type: application/x-www-form-urlencoded\r\nx-requested-with: XMLHttpRequest\r\nCookie: $cookie\r\n", 'method' => 'POST', 'content' => $post, 'timeout' => $timeout)));
+        $stream = stream_context_create(array('http' => array('header' => "Content-type: application/x-www-form-urlencoded\r\nx-requested-with: XMLHttpRequest\r\n", 'method' => 'POST', 'content' => $post, 'timeout' => $timeout)));
         while ($times-- > 0) {
             $s = file_get_contents($url, NULL, $stream, 0, 4096000);
             if ($s !== FALSE) return $s;
@@ -65,11 +64,11 @@ class Http
      * @param int $times
      * @return string
      */
-    public static function httpsGet($url, $cookie = '', $timeout = 30, $times = 1) {
+    public static function httpsGet($url, $timeout = 30, $times = 1) {
         if (substr($url, 0, 7) == 'http://') {
-            return self::httpGet($url, $cookie, $timeout, $times);
+            return self::httpGet($url, $timeout, $times);
         }
-        return self::httpsPost($url, '', $cookie, $timeout, $times);
+        return self::httpsPost($url, '', $timeout);
     }
 
     /**
@@ -80,56 +79,22 @@ class Http
      * @param int $times
      * @return mixed|string
      */
-    public static function httpsPost($url, $post = '', $cookie = '', $timeout = 30, $times = 1) {
+
+    public static function httpsPost($url, $post = '',$timeout = 30) {
         if (substr($url, 0, 7) == 'http://') {
-            return self::httpPost($url, $post, $cookie, $timeout, $times);
+            return self::httpPost($url, $post, $timeout);
         }
-        is_array($post) AND $post = http_build_query($post);
-        is_array($cookie) AND $cookie = http_build_query($cookie);
-       if (!function_exists('curl_init')) {
-            return Error::error(-1, 'server not installed curl.');
-        }
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 2); // 1/2
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/x-www-form-urlencoded', 'x-requested-with: XMLHttpRequest'));
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERAGENT, GlobalVariables::SERVER('HTTP_USER_AGENT'));
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2); // 从证书中检查SSL加密算法是否存在，默认可以省略
-        if ($post) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        }
-        $header = array('Content-type: application/x-www-form-urlencoded', 'X-Requested-With: XMLHttpRequest');
-        if ($cookie) {
-            $header[] = "Cookie: $cookie";
-        }
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-
-        (!ini_get('safe_mode') && !ini_get('open_basedir')) && curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 使用自动跳转, 安全模式不允许
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        $data = curl_exec($ch);
-        if (curl_errno($ch)) {
-            return Error::error(-1, 'Errno' . curl_error($ch));
-        }
-        if (!$data) {
-            curl_close($ch);
-            return '';
-        }
-
-        list($header, $data) = explode("\r\n\r\n", $data);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($http_code == 301 || $http_code == 302) {
-            $matches = array();
-            preg_match('/Location:(.*?)\n/', $header, $matches);
-            $url = trim(array_pop($matches));
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            $data = curl_exec($ch);
-        }
-        curl_close($ch);
-        return $data;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1');
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);  // https请求 不验证证书和hosts
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        $result = curl_exec($curl);
+        $error = curl_error($curl);
+        return $error ? $error : $result;
     }
 
     /**
