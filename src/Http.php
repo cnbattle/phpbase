@@ -13,37 +13,36 @@ class Http
 {
     /**
      * @param $url
-     * @param string $cookie
      * @param int $timeout
-     * @param int $times
      * @return bool|string
      */
     public static function httpGet($url, $timeout = 30) {
         if (substr($url, 0, 8) == 'https://') {
             return self::httpsGet($url, $timeout);
         }
-        return self::httpPost($url, '', $timeout);
+        return self::httpPost($url, false, false, $timeout);
     }
 
     /**
      * @param $url
-     * @param string $post
-     * @param string $cookie
+     * @param bool $post
+     * @param bool $header
      * @param int $timeout
-     * @param int $times
-     * @return bool|string
+     * @return mixed|string
      */
-    public static function httpPost($url, $post = '',  $timeout = 30) {
+    public static function httpPost($url, $post = false, $header = false, $timeout = 30) {
         if (substr($url, 0, 8) == 'https://') {
             return self::httpsPost($url, $post, $timeout);
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_TIMEOUT,$timeout);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        if ($post) {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        }
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1');
         $result = curl_exec($curl);
         $error = curl_error($curl);
         return $error ? $error : $result;
@@ -51,40 +50,38 @@ class Http
 
     /**
      * @param $url
-     * @param string $cookie
      * @param int $timeout
-     * @param int $times
-     * @return string
+     * @return bool|mixed|string
      */
     public static function httpsGet($url, $timeout = 30) {
         if (substr($url, 0, 7) == 'http://') {
             return self::httpGet($url, $timeout);
         }
-        return self::httpsPost($url, '', $timeout);
+        return self::httpsPost($url, false, false, $timeout);
     }
 
     /**
      * @param $url
-     * @param string $post
-     * @param string $cookie
+     * @param bool $post
+     * @param bool $header
      * @param int $timeout
-     * @param int $times
      * @return mixed|string
      */
-
-    public static function httpsPost($url, $post = '',$timeout = 30) {
+    public static function httpsPost($url, $post = false, $header = false, $timeout = 30) {
         if (substr($url, 0, 7) == 'http://') {
             return self::httpPost($url, $post, $timeout);
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_TIMEOUT,$timeout);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        if ($post) {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        }
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1');
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);  // https请求 不验证证书和hosts
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         $result = curl_exec($curl);
         $error = curl_error($curl);
         return $error ? $error : $result;
