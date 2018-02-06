@@ -18,22 +18,11 @@ class Http
      * @param int $times
      * @return bool|string
      */
-    public static function httpGet($url, $timeout = 30, $times = 3) {
+    public static function httpGet($url, $timeout = 30) {
         if (substr($url, 0, 8) == 'https://') {
-            return self::httpsGet($url, $timeout, $times);
+            return self::httpsGet($url, $timeout);
         }
-        $arr = array(
-            'http' => array(
-                'method' => 'GET',
-                'timeout' => $timeout
-            )
-        );
-        $stream = stream_context_create($arr);
-        while ($times-- > 0) {
-            $s = file_get_contents($url, NULL, $stream, 0, 4096000);
-            if ($s !== FALSE) return $s;
-        }
-        return FALSE;
+        return self::httpPost($url, '', $timeout);
     }
 
     /**
@@ -44,17 +33,20 @@ class Http
      * @param int $times
      * @return bool|string
      */
-    public static function httpPost($url, $post = '',  $timeout = 30,$times = 3) {
+    public static function httpPost($url, $post = '',  $timeout = 30) {
         if (substr($url, 0, 8) == 'https://') {
             return self::httpsPost($url, $post, $timeout);
         }
-        is_array($post) AND $post = http_build_query($post);
-        $stream = stream_context_create(array('http' => array('header' => "Content-type: application/x-www-form-urlencoded\r\nx-requested-with: XMLHttpRequest\r\n", 'method' => 'POST', 'content' => $post, 'timeout' => $timeout)));
-        while ($times-- > 0) {
-            $s = file_get_contents($url, NULL, $stream, 0, 4096000);
-            if ($s !== FALSE) return $s;
-        }
-        return FALSE;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_TIMEOUT,$timeout);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1');
+        $result = curl_exec($curl);
+        $error = curl_error($curl);
+        return $error ? $error : $result;
     }
 
     /**
@@ -64,9 +56,9 @@ class Http
      * @param int $times
      * @return string
      */
-    public static function httpsGet($url, $timeout = 30, $times = 1) {
+    public static function httpsGet($url, $timeout = 30) {
         if (substr($url, 0, 7) == 'http://') {
-            return self::httpGet($url, $timeout, $times);
+            return self::httpGet($url, $timeout);
         }
         return self::httpsPost($url, '', $timeout);
     }
@@ -86,6 +78,7 @@ class Http
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_TIMEOUT,$timeout);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
