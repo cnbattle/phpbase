@@ -16,7 +16,7 @@ class Files
      * @param int $mode
      * @return bool
      */
-    public function makeDirs($dir, $mode = 0777) {
-        return is_dir($dir) or $this->makeDirs(dirname($dir)) and mkdir($dir, $mode);
+    public static function makeDirs($dir, $mode = 0777) {
+        return is_dir($dir) or self::makeDirs(dirname($dir)) and mkdir($dir, $mode);
     }
 }
