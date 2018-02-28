@@ -2,14 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: cnbattle
- * Date: 17-12-13
- * Time: 上午9:18
+ * Date: 18-2-28
+ * Time: 上午11:06
  */
 
-namespace PHPBase;
+namespace PHPBase\Encrypt;
 
-
-class Encrypt
+class Func
 {
     /**
      * Discuz!加密解密方法
@@ -20,10 +19,8 @@ class Encrypt
      * @return bool|string
      */
     public static function authCode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
-
         $string = str_replace("-", "/", $string);
         $string = str_replace("_", "+", $string);
-
         // 动态密匙长度，相同的明文会生成不同密文就是依靠动态密匙
         $ckey_length = 4;
         // 密匙
@@ -41,10 +38,8 @@ class Encrypt
         // 如果是解码的话，会从第$ckey_length位开始，因为密文前$ckey_length位保存 动态密匙，以保证解密正确
         $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string;
         $string_length = strlen($string);
-
         $result = '';
         $box = range(0, 255);
-
         $rndkey = array();
         // 产生密匙簿
         for ($i = 0; $i <= 255; $i++) {
@@ -86,5 +81,4 @@ class Encrypt
             return $output_key;
         }
     }
-
 }
