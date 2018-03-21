@@ -32,7 +32,7 @@ class Http
      */
     public static function httpPost($url, $post = false, $header = false, $timeout = 30) {
         if (substr($url, 0, 8) == 'https://') {
-            return self::httpsPost($url, $post, $timeout);
+            return self::httpsPost($url, $post, $header,$timeout);
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -71,7 +71,7 @@ class Http
      */
     public static function httpsPost($url, $post = false, $header = false, $timeout = 30) {
         if (substr($url, 0, 7) == 'http://') {
-            return self::httpPost($url, $post, $timeout);
+            return self::httpPost($url, $post, $header, $timeout);
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
