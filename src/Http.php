@@ -92,6 +92,30 @@ class Http
     }
 
     /**
+     * Post 发送json字符串
+     * @param $url
+     * @param $jsonStr
+     * @param int $timeout
+     * @return mixed|string
+     */
+    public function httpPostJson($url, $jsonStr, $timeout = 30) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonStr);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json; charset=utf-8',
+                'Content-Length: ' . strlen($jsonStr)
+            )
+        );
+        $result = curl_exec($curl);
+        $error = curl_error($curl);
+        return $error ? $error : $result;
+    }
+
+    /**
      * 多线程抓取数据，需要CURL支持，一般在命令行下执行，此函数收集于互联网，由 xiuno 整理，经过测试，会导致 CPU 100%。
      * @param $urls
      * @return array
