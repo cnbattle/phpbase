@@ -101,7 +101,7 @@ class Func
      * @param string $default_lang
      * @return string
      */
-    public function manyTimesAgo($time, $default_lang = 'zh_cn') {
+    public static function manyTimesAgo($time, $default_lang = 'zh_cn') {
         $timeDifference = time() - $time;
         $language['en'] = [' Year', ' Month', ' Week', ' Day', ' Hour', ' Minute', ' Second', ' Ago'];
         $language['zh_cn'] = ['年', '个月', '星期', '天', '小时', '分钟', '秒', '前'];
