@@ -17,7 +17,8 @@
     },
     "autoload": {
         "psr-4": {
-            "PHPBase\\": "src/"
+            "PHPBase\\": "src/",
+            "PHPBaseFunc\\": "src/Func"
         }
     }
 }
