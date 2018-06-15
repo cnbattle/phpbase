@@ -7,14 +7,24 @@
  */
 
 namespace PHPBaseFunc {
+
+    // 无 Notice 方式的获取超级全局变量中的 key
+    function _GET($k, $def = NULL) { return isset($_GET[$k]) ? $_GET[$k] : $def; }
+    function _POST($k, $def = NULL) { return isset($_POST[$k]) ? $_POST[$k] : $def; }
+    function _COOKIE($k, $def = NULL) { return isset($_COOKIE[$k]) ? $_COOKIE[$k] : $def; }
+    function _REQUEST($k, $def = NULL) { return isset($_REQUEST[$k]) ? $_REQUEST[$k] : $def; }
+    function _ENV($k, $def = NULL) { return isset($_ENV[$k]) ? $_ENV[$k] : $def; }
+    function _SERVER($k, $def = NULL) { return isset($_SERVER[$k]) ? $_SERVER[$k] : $def; }
+    function GLOBALS($k, $def = NULL) { return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def; }
+    function G($k, $def = NULL) { return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def; }
+    function _SESSION($k, $def = NULL) {return isset($_SESSION[$k]) ? $_SESSION[$k] : $def;}
     /**
      * 最好的随机数
      * @param int $min
      * @param int $max
      * @return int
      */
-    function rand($min, $max)
-    {
+    function rand($min, $max){
         return mt_rand($min, $max);
     }
 
@@ -121,5 +131,76 @@ namespace PHPBaseFunc {
                 return $num . $value . $language[$default_lang][7];
             }
         }
+    }
+
+    /*
+        param(1);
+        param(1, '');
+        param(1, 0);
+        param(1, array());
+        param(1, array(''));
+        param(1, array(0));
+    */
+    function param($key, $default = '', $htmlspecialchars = TRUE, $addslashes = FALSE)
+    {
+        if (!isset($_REQUEST[$key]) || ($key === 0 && empty($_REQUEST[$key]))) {
+            if (is_array($default)) {
+                return array();
+            } else {
+                return $default;
+            }
+        }
+        $val = $_REQUEST[$key];
+        $val = param_force($val, $default, $htmlspecialchars, $addslashes);
+        return $val;
+    }
+
+    /*
+	仅支持一维数组的类型强制转换。
+	param_force($val);
+	param_force($val, '');
+	param_force($val, 0);
+	param_force($arr, array());
+	param_force($arr, array(''));
+	param_force($arr, array(0));
+*/
+    function param_force($val, $defval, $htmlspecialchars = TRUE, $addslashes = FALSE)
+    {
+        $get_magic_quotes_gpc = _SERVER('get_magic_quotes_gpc');
+        if (is_array($defval)) {
+            $defval = empty($defval) ? '' : $defval[0]; // 数组的第一个元素，如果没有则为空字符串
+            if (is_array($val)) {
+                foreach ($val as &$v) {
+                    if (is_array($v)) {
+                        $v = $defval;
+                    } else {
+                        if (is_string($defval)) {
+                            //$v = trim($v);
+                            $addslashes AND !$get_magic_quotes_gpc && $v = addslashes($v);
+                            !$addslashes AND $get_magic_quotes_gpc && $v = stripslashes($v);
+                            $htmlspecialchars AND $v = htmlspecialchars($v);
+                        } else {
+                            $v = intval($v);
+                        }
+                    }
+                }
+            } else {
+                return array();
+            }
+        } else {
+            if (is_array($val)) {
+                $val = $defval;
+            } else {
+                if (is_string($defval)) {
+                    //$val = trim($val);
+                    $addslashes AND !$get_magic_quotes_gpc && $val = addslashes($val);
+                    !$addslashes AND $get_magic_quotes_gpc && $val = stripslashes($val);
+                    $htmlspecialchars AND $val = htmlspecialchars($val);
+                } else {
+                    $val = intval($val);
+                }
+            }
+        }
+        return $val;
     }
 }
