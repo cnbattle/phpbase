@@ -1,30 +1,61 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cnbattle
- * Date: 18-6-15
- * Time: 上午11:22
- */
 
-namespace PHPBaseFunc {
+namespace Func {
 
     // 无 Notice 方式的获取超级全局变量中的 key
-    function _GET($k, $def = NULL) { return isset($_GET[$k]) ? $_GET[$k] : $def; }
-    function _POST($k, $def = NULL) { return isset($_POST[$k]) ? $_POST[$k] : $def; }
-    function _COOKIE($k, $def = NULL) { return isset($_COOKIE[$k]) ? $_COOKIE[$k] : $def; }
-    function _REQUEST($k, $def = NULL) { return isset($_REQUEST[$k]) ? $_REQUEST[$k] : $def; }
-    function _ENV($k, $def = NULL) { return isset($_ENV[$k]) ? $_ENV[$k] : $def; }
-    function _SERVER($k, $def = NULL) { return isset($_SERVER[$k]) ? $_SERVER[$k] : $def; }
-    function GLOBALS($k, $def = NULL) { return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def; }
-    function G($k, $def = NULL) { return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def; }
-    function _SESSION($k, $def = NULL) {return isset($_SESSION[$k]) ? $_SESSION[$k] : $def;}
+    function _GET($k, $def = NULL) {
+        return isset($_GET[$k]) ? $_GET[$k] : $def;
+    }
+
+    function _POST($k, $def = NULL) {
+        return isset($_POST[$k]) ? $_POST[$k] : $def;
+    }
+
+    function _COOKIE($k, $def = NULL) {
+        return isset($_COOKIE[$k]) ? $_COOKIE[$k] : $def;
+    }
+
+    function _REQUEST($k, $def = NULL) {
+        return isset($_REQUEST[$k]) ? $_REQUEST[$k] : $def;
+    }
+
+    function _ENV($k, $def = NULL) {
+        return isset($_ENV[$k]) ? $_ENV[$k] : $def;
+    }
+
+    function _SERVER($k, $def = NULL) {
+        return isset($_SERVER[$k]) ? $_SERVER[$k] : $def;
+    }
+
+    function GLOBALS($k, $def = NULL) {
+        return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def;
+    }
+
+    function G($k, $def = NULL) {
+        return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def;
+    }
+
+    function _SESSION($k, $def = NULL) {
+        return isset($_SESSION[$k]) ? $_SESSION[$k] : $def;
+    }
+
+    /**
+     * 递归创建目录
+     * @param $dir
+     * @param int $mode
+     * @return bool
+     */
+    function makeDirs($dir, $mode = 0777) {
+        return is_dir($dir) or makeDirs(dirname($dir)) and mkdir($dir, $mode);
+    }
+
     /**
      * 最好的随机数
      * @param int $min
      * @param int $max
      * @return int
      */
-    function rand($min, $max){
+    function rand($min, $max) {
         return mt_rand($min, $max);
     }
 
@@ -37,8 +68,7 @@ namespace PHPBaseFunc {
      * @param bool $is_end 是否包含结束字符串,默认包含
      * @return array|string
      */
-    function strSearchAll($str, $startChar, $endChar, $is_start = true, $is_end = true)
-    {
+    function strSearchAll($str, $startChar, $endChar, $is_start = true, $is_end = true) {
         $startNum = 0;
         $endNum = 0;
         $arr = array();
@@ -74,8 +104,7 @@ namespace PHPBaseFunc {
      * @param $parameter 检测的数组
      * @return bool
      */
-    function parameterIsNull($arr, $parameter)
-    {
+    function parameterIsNull($arr, $parameter) {
         foreach ($arr as $key => $value) {
             if (!array_key_exists($value, $parameter) && empty($parameter[$value])) {
                 die('缺乏必要参数:' . $value);
@@ -88,8 +117,7 @@ namespace PHPBaseFunc {
      * 获取访问者ip
      * @return array|false|string
      */
-    function getClientIP()
-    {
+    function getClientIP() {
         if (getenv('HTTP_CLIENT_IP')) {
             $ip = getenv('HTTP_CLIENT_IP');
         } elseif (getenv('HTTP_X_FORWARDED_FOR')) {
@@ -112,8 +140,7 @@ namespace PHPBaseFunc {
      * @param string $default_lang
      * @return string
      */
-    function manyTimesAgo($time, $default_lang = 'zh_cn')
-    {
+    function manyTimesAgo($time, $default_lang = 'zh_cn') {
         $timeDifference = time() - $time;
         $language['en'] = [' Year', ' Month', ' Week', ' Day', ' Hour', ' Minute', ' Second', ' Ago'];
         $language['zh_cn'] = ['年', '个月', '星期', '天', '小时', '分钟', '秒', '前'];
@@ -141,8 +168,7 @@ namespace PHPBaseFunc {
         param(1, array(''));
         param(1, array(0));
     */
-    function param($key, $default = '', $htmlspecialchars = TRUE, $addslashes = FALSE)
-    {
+    function param($key, $default = '', $htmlspecialchars = TRUE, $addslashes = FALSE) {
         if (!isset($_REQUEST[$key]) || ($key === 0 && empty($_REQUEST[$key]))) {
             if (is_array($default)) {
                 return array();
@@ -164,8 +190,7 @@ namespace PHPBaseFunc {
 	param_force($arr, array(''));
 	param_force($arr, array(0));
 */
-    function param_force($val, $defval, $htmlspecialchars = TRUE, $addslashes = FALSE)
-    {
+    function param_force($val, $defval, $htmlspecialchars = TRUE, $addslashes = FALSE) {
         $get_magic_quotes_gpc = _SERVER('get_magic_quotes_gpc');
         if (is_array($defval)) {
             $defval = empty($defval) ? '' : $defval[0]; // 数组的第一个元素，如果没有则为空字符串

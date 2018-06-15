@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cnbattle
- * Date: 17-11-18
- * Time: 下午3:20
- */
 
 namespace PHPBase;
 
-class Func
-{
+class Func {
     /**
      * 最好的随机数
      * @param int $min
