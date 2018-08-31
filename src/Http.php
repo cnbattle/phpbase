@@ -13,26 +13,37 @@ class Http
 {
     /**
      * @param $url
+     * @param array $query
+     * @param array $header
      * @param int $timeout
-     * @return bool|string
+     * @return bool|mixed|string
      */
-    public static function httpGet($url, $timeout = 30) {
-        if (substr($url, 0, 8) == 'https://') {
-            return self::httpsGet($url, $timeout);
+    public static function httpGet(string $url, array $query = [], array $header = [], int $timeout = 30) {
+        $build_query = http_build_query($query);
+        if ($build_query != '') {
+            $url = $url . '?' . $build_query;
         }
-        return self::httpPost($url, false, false, $timeout);
+        if (substr($url, 0, 8) == 'https://') {
+            return self::httpsGet($url, $query, $header, $timeout);
+        }
+        return self::httpPost($url, [], $query, $header, $timeout);
     }
 
     /**
      * @param $url
-     * @param bool $post
-     * @param bool $header
+     * @param array $post
+     * @param array $query
+     * @param array $header
      * @param int $timeout
      * @return mixed|string
      */
-    public static function httpPost($url, $post = false, $header = false, $timeout = 30) {
+    public static function httpPost(string $url, array $post = [], array $query = [], array $header = [], int $timeout = 30) {
+        $build_query = http_build_query($query);
+        if ($build_query != '') {
+            $url = $url . '?' . $build_query;
+        }
         if (substr($url, 0, 8) == 'https://') {
-            return self::httpsPost($url, $post, $header, $timeout);
+            return self::httpsPost($url, $post, $query, $header, $timeout);
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -52,32 +63,43 @@ class Http
 
     /**
      * @param $url
+     * @param array $query
+     * @param array $header
      * @param int $timeout
      * @return bool|mixed|string
      */
-    public static function httpsGet($url, $timeout = 30) {
+    public static function httpsGet(string $url, array $query = [], array $header = [], int $timeout = 30) {
         if (substr($url, 0, 7) == 'http://') {
             return self::httpGet($url, $timeout);
         }
-        return self::httpsPost($url, false, false, $timeout);
+        return self::httpsPost($url, [], $query, $header, $timeout);
     }
 
     /**
      * @param $url
-     * @param bool $post
-     * @param bool $header
+     * @param array $post
+     * @param array $query
+     * @param array $header
      * @param int $timeout
      * @return mixed|string
      */
-    public static function httpsPost($url, $post = false, $header = false, $timeout = 30) {
+    public static function httpsPost(string $url, array $post = [], array $query = [], array $header = [], int $timeout = 30) {
         if (substr($url, 0, 7) == 'http://') {
             return self::httpPost($url, $post, $header, $timeout);
+        }
+        $build_query = http_build_query($query);
+        if ($build_query != '') {
+            $url = $url . '?' . $build_query;
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         if ($header) {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            $headers = [];
+            foreach ($header as $key => $value) {
+                $headers[] = $key . ':' . $value;
+            }
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         }
         if ($post) {
             curl_setopt($curl, CURLOPT_POST, 1);
@@ -95,14 +117,27 @@ class Http
      * Post 发送json字符串
      * @param $url
      * @param $jsonStr
+     * @param array $query
+     * @param array $header
      * @param int $timeout
      * @return mixed|string
      */
-    public function httpPostJson($url, $jsonStr, $timeout = 30) {
+    public function httpPostJson(string $url, string $jsonStr, array $query = [], array $header = [], int $timeout = 30) {
+        $build_query = http_build_query($query);
+        if ($build_query != '') {
+            $url = $url . '?' . $build_query;
+        }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        if ($header) {
+            $headers = [];
+            foreach ($header as $key => $value) {
+                $headers[] = $key . ':' . $value;
+            }
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        }
         curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonStr);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
@@ -120,7 +155,7 @@ class Http
      * @param $urls
      * @return array
      */
-    public static function httpMultiGet($urls) {
+    public static function httpMultiGet(array $urls) {
         // 如果不支持，则转为单线程顺序抓取
         $data = array();
         if (!function_exists('curl_multi_init')) {
