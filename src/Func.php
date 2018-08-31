@@ -49,7 +49,7 @@ class Func {
             }
             return $arr;
         }
-        return '数据不对称';
+        return $arr;
     }
 
     /**
