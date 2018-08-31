@@ -158,6 +158,7 @@ namespace Func {
                 return $num . $value . $language[$lang][7];
             }
         }
+        return '';
     }
 
     /*

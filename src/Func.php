@@ -54,14 +54,15 @@ class Func {
 
     /**
      * 参数检测
-     * @param $arr key数组
-     * @param $parameter 检测的数组
+     * @param array $arr key数组
+     * @param array $parameter 检测的数组
      * @return bool
+     * @throws \Exception
      */
-    public static function parameterIsNull($arr, $parameter) {
+    public static function parameterIsNull(array $arr,array $parameter) {
         foreach ($arr as $key => $value) {
             if (!array_key_exists($value, $parameter) && empty($parameter[$value])) {
-                die('缺乏必要参数:' . $value);
+                throw new \Exception('缺乏必要参数:' . $value);
             }
         }
         return true;
@@ -112,6 +113,7 @@ class Func {
                 return $num . $value . $language[$lang][7];
             }
         }
+        return '';
     }
 
 }
