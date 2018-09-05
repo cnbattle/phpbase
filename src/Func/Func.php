@@ -107,7 +107,7 @@ namespace Func {
     function parameterIsNull($arr, $parameter) {
         foreach ($arr as $key => $value) {
             if (!array_key_exists($value, $parameter) && empty($parameter[$value])) {
-                die('缺乏必要参数:' . $value);
+                die('缺乏参数:' . $value);
             }
         }
         return true;

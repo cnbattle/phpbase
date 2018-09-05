@@ -2,9 +2,8 @@
 This is a PHP commonly used function collection package.
 
 
-<a href="https://travis-ci.org/cnbattle/phpbase"><img src="https://travis-ci.org/cnbattle/phpbase.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/cnbattle/phpbase"><img src="https://poser.pugx.org/cnbattle/phpbase/d/total.svg" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/cnbattle/phpbase"><img src="https://poser.pugx.org/cnbattle/phpbase/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/cnbattle/phpbase"><img src="https://poser.pugx.org/cnbattle/phpbase/d/total.svg" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/cnbattle/phpbase"><img src="https://poser.pugx.org/cnbattle/phpbase/license.svg" alt="License"></a>
 
 这是一个PHP常用函数集合包。
