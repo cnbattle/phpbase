@@ -19,6 +19,9 @@
         "psr-4": {
             "PHPBase\\": "src/",
             "PHPBaseFunc\\": "src/Func"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     }
 }
