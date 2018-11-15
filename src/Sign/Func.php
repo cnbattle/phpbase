@@ -16,11 +16,12 @@ class Func
      * @param string $signKey
      * @return array
      */
-    public function getVerifySign($postData,$signKey = 'cnbattle'){
+    public function getVerifySign($postData, $signKey = 'cnbattle')
+    {
         ksort($postData);
         $str = http_build_query($postData);
         $timestamp = time();
-        $sign = md5($signKey.$str.$timestamp);
-        return ['sign'=>$sign,'timestamp'=>$timestamp];
+        $sign = md5($signKey . $str . $timestamp);
+        return ['sign' => $sign, 'timestamp' => $timestamp];
     }
 }

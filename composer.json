@@ -17,11 +17,11 @@
     },
     "autoload": {
         "psr-4": {
-            "PHPBase\\": "src/",
-            "PHPBaseFunc\\": "src/Func"
+            "PHPBase\\": "src/"
         },
         "files": [
-            "src/functions.php"
+            "src/func.php",
+            "src/func_global.php"
         ]
     }
 }

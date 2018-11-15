@@ -17,18 +17,21 @@ class Aes
      * 初始化生产 key iv,初次需要保存,以便后续解密
      * @return array
      */
-    public function init() {
+    public function init()
+    {
         $this->key = base64_encode(openssl_random_pseudo_bytes(32));
         $this->iv = base64_encode(openssl_random_pseudo_bytes(16));
         return ['key' => $this->key, 'iv' => $this->iv];
     }
 
-    public function setKey($key) {
+    public function setKey($key)
+    {
         $this->key = $key;
         return $this;
     }
 
-    public function setIv($iv) {
+    public function setIv($iv)
+    {
         $this->iv = $iv;
         return $this;
     }
@@ -38,10 +41,10 @@ class Aes
      * @param $data
      * @return string
      */
-    public function encrypt($data) {
+    public function encrypt($data)
+    {
         $encrypted = openssl_encrypt($data, 'aes-256-cbc', base64_decode($this->key), OPENSSL_RAW_DATA, base64_decode($this->iv));
         return base64_encode($encrypted);
-
     }
 
     /**
@@ -49,7 +52,8 @@ class Aes
      * @param $data
      * @return string
      */
-    public function decrypt($data) {
+    public function decrypt($data)
+    {
         $decrypted = openssl_decrypt(base64_decode($data), 'aes-256-cbc', base64_decode($this->key), OPENSSL_RAW_DATA, base64_decode($this->iv));
         return $decrypted;
     }

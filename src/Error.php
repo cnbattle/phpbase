@@ -10,7 +10,8 @@ namespace PHPBase;
 
 class Error
 {
-    public static function output($message) {
+    public static function output($message)
+    {
         die($message);
     }
 
@@ -19,7 +20,8 @@ class Error
      * @param string $msg
      * @return array
      */
-    public static function error($status = 200, $msg = '') {
+    public static function error($status = 200, $msg = '')
+    {
         return json_encode([
             'status' => $status,
             'msg' => $msg
@@ -30,7 +32,8 @@ class Error
      * @param int $status
      * @param string $msg
      */
-    public static function errorHandle($status = 200, $msg = '') {
+    public static function errorHandle($status = 200, $msg = '')
+    {
         die(json_encode([
             'status' => $status,
             'msg' => $msg

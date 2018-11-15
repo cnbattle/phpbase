@@ -6,67 +6,53 @@
  * Time: 下午5:41
  */
 
-// 无 Notice 方式的获取超级全局变量中的 key
 
-if (!function_exists('_GET')) {
-    function _GET($k, $def = NULL)
+if (!function_exists('parameterIsNull')) {
+    /**
+     * 参数检测
+     * @param array $arr key数组
+     * @param array $parameter 检测的数组
+     * @return bool
+     * @throws \Exception
+     */
+    function parameterIsNull(array $arr, array $parameter)
     {
-        return isset($_GET[$k]) ? $_GET[$k] : $def;
+        foreach ($arr as $key => $value) {
+            if (!array_key_exists($value, $parameter) && empty($parameter[$value])) {
+                throw new \Exception('缺乏必要参数:' . $value);
+            }
+        }
+        return true;
     }
 }
 
-if (!function_exists('_POST')) {
-    function _POST($k, $def = NULL)
+if (!function_exists('dd')) {
+    /**
+     * 打印输出
+     * @return mixed
+     */
+    function dd()
     {
-        return isset($_POST[$k]) ? $_POST[$k] : $def;
-    }
-}
-
-if (!function_exists('_COOKIE')) {
-    function _COOKIE($k, $def = NULL)
-    {
-        return isset($_COOKIE[$k]) ? $_COOKIE[$k] : $def;
-    }
-}
-
-
-if (!function_exists('_REQUEST')) {
-    function _REQUEST($k, $def = NULL)
-    {
-        return isset($_REQUEST[$k]) ? $_REQUEST[$k] : $def;
-    }
-}
-
-if (!function_exists('_ENV')) {
-    function _ENV($k, $def = NULL)
-    {
-        return isset($_ENV[$k]) ? $_ENV[$k] : $def;
-    }
-}
-if (!function_exists('_SERVER')) {
-    function _SERVER($k, $def = NULL)
-    {
-        return isset($_SERVER[$k]) ? $_SERVER[$k] : $def;
-    }
-}
-
-if (!function_exists('GLOBALS')) {
-    function GLOBALS($k, $def = NULL)
-    {
-        return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def;
-    }
-}
-if (!function_exists('G')) {
-    function G($k, $def = NULL)
-    {
-        return isset($GLOBALS[$k]) ? $GLOBALS[$k] : $def;
-    }
-}
-
-if (!function_exists('_SESSION')) {
-    function _SESSION($k, $def = NULL)
-    {
-        return isset($_SESSION[$k]) ? $_SESSION[$k] : $def;
+        header("Content-type: text/html; charset=utf-8");
+        $args = func_get_args(); //获取参数
+        if (count($args) < 1) {
+            die('无参数');
+        }
+        echo '<div style="width:100%;text-align:left"><pre>';
+        //循环输出
+        foreach ($args as $arg) {
+            if (is_array($arg)) {
+                print_r($arg);
+                echo '<hr>';
+            } else if (is_string($arg)) {
+                echo $arg . '<hr>';
+            } else {
+                var_dump($arg);
+                echo '<hr>';
+            }
+        }
+        echo '</pre></div>';
+        die;
     }
 }
 
@@ -149,4 +135,3 @@ if (!function_exists('manyTimesAgo')) {
         return '';
     }
 }
-

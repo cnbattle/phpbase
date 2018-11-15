@@ -18,7 +18,8 @@ class Func
      * @param int $expiry : 密文有效期
      * @return bool|string
      */
-    public static function authCode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+    public static function authCode($string, $operation = 'DECODE', $key = '', $expiry = 0)
+    {
         $string = str_replace("-", "/", $string);
         $string = str_replace("_", "+", $string);
         // 动态密匙长度，相同的明文会生成不同密文就是依靠动态密匙

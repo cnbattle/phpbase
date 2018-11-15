@@ -15,21 +15,27 @@ class Rsa
     private $privateKey;
     private $publicKey;
 
-    public function __construct() {
+    public function __construct()
+    {
         return $this;
     }
+
     /**
-     * @param string $privateKey
+     * @param $privateKey
+     * @return $this
      */
-    public function setPrivateKey($privateKey) {
+    public function setPrivateKey($privateKey)
+    {
         $this->privateKey = $privateKey;
         return $this;
     }
 
     /**
-     * @param string $publicKey
+     * @param $publicKey
+     * @return $this
      */
-    public function setPublicKey($publicKey) {
+    public function setPublicKey($publicKey)
+    {
         $this->publicKey = $publicKey;
         return $this;
     }
@@ -38,7 +44,8 @@ class Rsa
      * @param $data
      * @return string
      */
-    public function encrypt($data) {
+    public function encrypt($data)
+    {
         openssl_public_encrypt($data, $crypted, $this->publicKey);
         return base64_encode($crypted);
     }
@@ -47,7 +54,8 @@ class Rsa
      * @param $data
      * @return mixed
      */
-    public function decrypt($data) {
+    public function decrypt($data)
+    {
         openssl_private_decrypt(base64_decode($data), $decrypted, $this->privateKey);
         return $decrypted;
     }

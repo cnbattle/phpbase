@@ -18,7 +18,8 @@ class Http
      * @param int $timeout
      * @return bool|mixed|string
      */
-    public static function httpGet(string $url, array $query = [], array $header = [], int $timeout = 30) {
+    public static function httpGet(string $url, array $query = [], array $header = [], int $timeout = 30)
+    {
         $build_query = http_build_query($query);
         if ($build_query != '') {
             $url = $url . '?' . $build_query;
@@ -37,7 +38,8 @@ class Http
      * @param int $timeout
      * @return mixed|string
      */
-    public static function httpPost(string $url, array $post = [], array $query = [], array $header = [], int $timeout = 30) {
+    public static function httpPost(string $url, array $post = [], array $query = [], array $header = [], int $timeout = 30)
+    {
         $build_query = http_build_query($query);
         if ($build_query != '') {
             $url = $url . '?' . $build_query;
@@ -68,7 +70,8 @@ class Http
      * @param int $timeout
      * @return bool|mixed|string
      */
-    public static function httpsGet(string $url, array $query = [], array $header = [], int $timeout = 30) {
+    public static function httpsGet(string $url, array $query = [], array $header = [], int $timeout = 30)
+    {
         if (substr($url, 0, 7) == 'http://') {
             return self::httpGet($url, $timeout);
         }
@@ -83,7 +86,8 @@ class Http
      * @param int $timeout
      * @return mixed|string
      */
-    public static function httpsPost(string $url, array $post = [], array $query = [], array $header = [], int $timeout = 30) {
+    public static function httpsPost(string $url, array $post = [], array $query = [], array $header = [], int $timeout = 30)
+    {
         if (substr($url, 0, 7) == 'http://') {
             return self::httpPost($url, $post, $header, $timeout);
         }
@@ -122,7 +126,8 @@ class Http
      * @param int $timeout
      * @return mixed|string
      */
-    public function httpPostJson(string $url, string $jsonStr, array $query = [], array $header = [], int $timeout = 30) {
+    public function httpPostJson(string $url, string $jsonStr, array $query = [], array $header = [], int $timeout = 30)
+    {
         $build_query = http_build_query($query);
         if ($build_query != '') {
             $url = $url . '?' . $build_query;
@@ -155,7 +160,8 @@ class Http
      * @param $urls
      * @return array
      */
-    public static function httpMultiGet(array $urls) {
+    public static function httpMultiGet(array $urls)
+    {
         // 如果不支持，则转为单线程顺序抓取
         $data = array();
         if (!function_exists('curl_multi_init')) {
